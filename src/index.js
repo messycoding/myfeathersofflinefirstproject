@@ -6,8 +6,9 @@ import localstorage from 'feathers-localstorage';
 import feathers from '@feathersjs/feathers';
 import feathersSocketio from '@feathersjs/socketio-client';
 import socketio from 'socket.io-client';
-import {ownnetWrapper} from '@feathersjs-offline/client';
-  
+import {owndataWrapper, Owndata} from '@feathersjs-offline/client';
+import memory from 'feathers-memory';
+
 const socketConnection = socketio('http://localhost:3030', {
   transports: ['websocket'],
   allowUpgrades: false,
@@ -16,8 +17,8 @@ const socketConnection = socketio('http://localhost:3030', {
 
 const app = feathers();
 app.configure(feathersSocketio(socketConnection));
-app.use('/messages', localstorage({ storage: AsyncStorage }));
-ownnetWrapper(app, '/messages', {});
+app.use('/messages', memory());
+owndataWrapper(app, '/messages');
 
 const App = () => {
     return (
